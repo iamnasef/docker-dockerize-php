@@ -1,1 +1,5 @@
-FROM alpine:3.211
+FROM alpine:3.15
+EXPOSE 80 443
+RUN apk update && apk add apache2 && apk add openrc
+ADD php /var/www/localhost/htdocs/
+WORKDIR /var/www/localhost/htdocs/
