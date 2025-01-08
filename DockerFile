@@ -3,6 +3,8 @@ EXPOSE 80 443
 RUN apk --no-cache update && \
  apk --no-cache add apache2
 ADD php /var/www/localhost/htdocs/
-USER apacheuser:apachegroup
+RUN addgroup apachegroup &&\
+adduser apacheuser --ingroup test
 RUN chown -R apacheuser:apachegroup /var/www/localhost/htdocs/
+USER apacheuser:apachegroup
 CMD ["httpd","-D","FOREGROUND"]
