@@ -1,5 +1,8 @@
 FROM alpine:3.15
 EXPOSE 80 443
-RUN apk update && apk add apache2 && httpd
+RUN apk --no-cache update && \
+ apk --no-cache add apache2
 ADD php /var/www/localhost/htdocs/
-WORKDIR /var/www/localhost/htdocs/
+USER apacheuser
+RUN chown -R apacheuser:apacheuser /var/www/localhost/htdocs/
+CMD ["httpd","-D","FOREGROUND"]
