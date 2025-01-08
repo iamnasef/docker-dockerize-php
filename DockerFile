@@ -6,5 +6,5 @@ ADD php /var/www/localhost/htdocs/
 RUN addgroup -S apachegroup &&\
 adduser -S apacheuser --ingroup apachegroup
 RUN chown -R apacheuser:apachegroup /var/www/localhost/htdocs/
-USER apacheuser:apachegroup
+USER apacheuser
 CMD ["httpd","-D","FOREGROUND"]
