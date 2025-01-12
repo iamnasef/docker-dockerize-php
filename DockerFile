@@ -1,10 +1,15 @@
 FROM alpine:3.15
 EXPOSE 80
+
 RUN apk --no-cache update && \
- apk --no-cache add apache2
+    apk --no-cache add apache2 php7 php7-apache2
 ADD php /var/www/localhost/htdocs/
-RUN addgroup -S apachegroup &&\
-adduser -S apacheuser --ingroup apachegroup
-RUN chown -R apacheuser:apachegroup /var/www/localhost/htdocs/
+RUN echo "ServerName localhost" > /etc/apache2/conf.d/server.conf && \
+    echo "LoadModule php7_module modules/libphp7.so" >> /etc/apache2/httpd.conf && \
+    echo "AddHandler php-script .php" >> /etc/apache2/httpd.conf && \
+    echo "DirectoryIndex index.php index.html" >> /etc/apache2/httpd.conf
+RUN addgroup -S apachegroup && \
+    adduser -S apacheuser --ingroup apachegroup && \
+    chown -R apacheuser:apachegroup /var/run/apache2 /var/log/apache2 /var/www/localhost
 USER apacheuser
-CMD ["httpd","-D","FOREGROUND"]
+CMD ["httpd", "-D", "FOREGROUND"]
